@@ -1,4 +1,4 @@
-package me.inassar.testingapp
+package me.inassar.restful
 
 import org.junit.Test
 
