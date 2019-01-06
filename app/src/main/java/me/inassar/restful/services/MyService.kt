@@ -4,6 +4,8 @@ import android.app.IntentService
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
+import com.google.gson.Gson
+import me.inassar.restful.model.DataItem
 import me.inassar.restful.utils.HttpHelper
 
 class MyService : IntentService("MyService") {
@@ -13,9 +15,12 @@ class MyService : IntentService("MyService") {
 
         val response = HttpHelper.downloadUrl(uri.toString())
 
+        val gson = Gson()
+        val dataItems = gson.fromJson(response, Array<DataItem>::class.java)
+
         LocalBroadcastManager.getInstance(applicationContext)
             .sendBroadcast(Intent(MY_SERVICE_MESSAGE).apply {
-                putExtra(MY_SERVICE_PAYLOAD, response)
+                putExtra(MY_SERVICE_PAYLOAD, dataItems)
             })
     }
 
