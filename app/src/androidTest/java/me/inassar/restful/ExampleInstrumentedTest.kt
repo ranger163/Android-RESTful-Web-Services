@@ -1,4 +1,4 @@
-package me.inassar.testingapp
+package me.inassar.restful
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
