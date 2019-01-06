@@ -10,8 +10,11 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import me.inassar.restful.services.MyService
+import me.inassar.restful.utils.NetworkHelper
 
 class MainActivity : AppCompatActivity() {
+
+    private var networkOk: Boolean = false
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -24,10 +27,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        init()
+        interactions()
+    }
+
+    private fun init() {
         LocalBroadcastManager.getInstance(applicationContext)
             .registerReceiver(broadcastReceiver, IntentFilter(MyService.MY_SERVICE_MESSAGE))
-
-        interactions()
+        networkOk = NetworkHelper.hasNetworkAccess(this@MainActivity)
+        outputTv.append("Network OK: $networkOk")
     }
 
     private fun interactions() {
