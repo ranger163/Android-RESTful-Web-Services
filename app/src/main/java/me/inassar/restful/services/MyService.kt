@@ -4,15 +4,18 @@ import android.app.IntentService
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
+import me.inassar.restful.utils.HttpHelper
 
 class MyService : IntentService("MyService") {
     override fun onHandleIntent(intent: Intent?) {
         val uri = intent?.data
         Log.i(TAG, "onHandleIntent: $uri")
-        Thread.sleep(1000)
+
+        val response = HttpHelper.downloadUrl(uri.toString())
+
         LocalBroadcastManager.getInstance(applicationContext)
             .sendBroadcast(Intent(MY_SERVICE_MESSAGE).apply {
-                putExtra(MY_SERVICE_PAYLOAD, "Service all done!")
+                putExtra(MY_SERVICE_PAYLOAD, response)
             })
     }
 

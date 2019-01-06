@@ -33,31 +33,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         LocalBroadcastManager.getInstance(applicationContext)
-            .registerReceiver(broadcastReceiver, IntentFilter(MyService.MY_SERVICE_MESSAGE))
+                .registerReceiver(broadcastReceiver, IntentFilter(MyService.MY_SERVICE_MESSAGE))
         networkOk = NetworkHelper.hasNetworkAccess(this@MainActivity)
         outputTv.append("Network OK: $networkOk")
     }
 
     private fun interactions() {
         runCodeBtn.setOnClickListener {
-
-            startService(
-                Intent(this@MainActivity, MyService::class.java).apply {
-                    data = Uri.parse(JSON_URL)
-                }
-            )
-
-            /**
-             * Use the repeat function to call the service as many times as you wish
-             * to test that the service will operate only once and do it's work as
-             * many times as you entered
-             * */
-            repeat(3) {
+            if (networkOk) {
                 startService(
-                    Intent(this@MainActivity, MyService::class.java).apply {
-                        data = Uri.parse(JSON_URL)
-                    }
+                        Intent(this@MainActivity, MyService::class.java).apply {
+                            data = Uri.parse(JSON_URL)
+                        }
                 )
+            } else {
+                toast("Network not available!")
             }
 
         }
@@ -73,12 +63,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(applicationContext)
-            .unregisterReceiver(broadcastReceiver)
+                .unregisterReceiver(broadcastReceiver)
     }
 
     companion object {
         private const val JSON_URL =
-            "http://560057.youcanlearnit.net/services/json/itemsfeed.php"
+                "http://560057.youcanlearnit.net/services/json/itemsfeed.php"
     }
 
 }
