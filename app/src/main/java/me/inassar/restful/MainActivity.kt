@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             if (networkOk) {
                 startService(
                     Intent(this@MainActivity, MyService::class.java).apply {
-                        data = Uri.parse(JSON_URL)
+                        data = Uri.parse(XML_URL)
                     }
                 )
             } else {
@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val JSON_URL =
             "http://560057.youcanlearnit.net/services/json/itemsfeed.php"
+        private const val XML_URL =
+            "http://560057.youcanlearnit.net/services/xml/itemsfeed.php"
     }
 
 }

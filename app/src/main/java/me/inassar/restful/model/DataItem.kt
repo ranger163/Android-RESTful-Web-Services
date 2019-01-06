@@ -4,13 +4,20 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class DataItem(
-    val itemName: String?,
-    val category: String?,
-    val description: String?,
-    val sort: Int?,
-    val price: Double?,
-    val image: String?
+    var itemName: String? = "",
+    var category: String? = "",
+    var description: String? = "",
+    var sort: Int? = -1,
+    var price: Double? = -1.0,
+    var image: String? = ""
 ) : Parcelable {
+
+    constructor() : this(
+        "", "",
+        "", -1,
+        -1.0, ""
+    )
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
