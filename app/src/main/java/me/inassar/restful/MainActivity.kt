@@ -19,8 +19,13 @@ class MainActivity : AppCompatActivity() {
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val dataItems = intent?.getParcelableArrayExtra(MyService.MY_SERVICE_PAYLOAD) as Array<DataItem>
-            dataItems.forEach { outputTv.append("${it.itemName}\n") }
+            if (intent!!.hasExtra(MyService.MY_SERVICE_PAYLOAD)) {
+                val dataItems = intent.getParcelableArrayExtra(MyService.MY_SERVICE_PAYLOAD) as Array<DataItem>
+                dataItems.forEach { outputTv.append("${it.itemName}\n") }
+            } else if (intent.hasExtra(MyService.MY_SERVICE_EXCEPTION)) {
+                val message = intent.getStringExtra(MyService.MY_SERVICE_EXCEPTION)
+                toast(message)
+            }
         }
     }
 
@@ -69,9 +74,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val JSON_URL =
-            "http://560057.youcanlearnit.net/services/json/itemsfeed.php"
+            "http://560057.youcanlearnit.net/secured/json/itemsfeed.php"
         private const val XML_URL =
-            "http://560057.youcanlearnit.net/services/xml/itemsfeed.php"
+            "http://560057.youcanlearnit.net/secured/xml/itemsfeed.php"
     }
 
 }
