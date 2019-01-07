@@ -48,11 +48,14 @@ public class HttpHelper {
             is = conn.getInputStream();
             return readStream(is);
 
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             if (is != null) {
                 is.close();
             }
         }
+        return null;
     }
 
     /**

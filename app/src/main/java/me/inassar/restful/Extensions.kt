@@ -1,8 +1,8 @@
 package me.inassar.restful
 
-import android.support.v7.app.AppCompatActivity
+import android.content.Context
 import android.widget.Toast
 
-fun AppCompatActivity.toast(message:String){
-    Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+fun Context.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
