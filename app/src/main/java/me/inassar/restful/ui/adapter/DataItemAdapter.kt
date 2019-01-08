@@ -1,9 +1,9 @@
-package me.inassar.restful
+package me.inassar.restful.ui.adapter
 
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 import android.preference.PreferenceManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,10 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import me.inassar.restful.R
 import me.inassar.restful.model.DataItem
-import java.io.IOException
+import me.inassar.restful.toast
+import me.inassar.restful.ui.activity.DetailActivity
 
-class DataItemAdapter(private val mContext: Context, private val mItems: List<DataItem>) :
+class DataItemAdapter(
+    private val mContext: Context,
+    private val mItems: List<DataItem>,
+    private val mBitmaps: MutableMap<String, Bitmap>
+) :
     RecyclerView.Adapter<DataItemAdapter.ViewHolder>() {
 
     private var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
@@ -46,11 +52,12 @@ class DataItemAdapter(private val mContext: Context, private val mItems: List<Da
 
         try {
             holder.tvName.text = item.itemName
-            val imageFile = item.image
-            val inputStream = mContext.assets.open(imageFile!!)
-            val d = Drawable.createFromStream(inputStream, null)
-            holder.imageView.setImageDrawable(d)
-        } catch (e: IOException) {
+//            val imageFile = item.image
+//            val inputStream = mContext.assets.open(imageFile!!)
+//            val d = Drawable.createFromStream(inputStream, null)
+            val bitmap = mBitmaps[item.itemName]
+            holder.imageView.setImageBitmap(bitmap)
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 

@@ -1,4 +1,4 @@
-package me.inassar.restful;
+package me.inassar.restful.ui.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import me.inassar.restful.R;
 import me.inassar.restful.model.DataItem;
 
 import java.io.IOException;

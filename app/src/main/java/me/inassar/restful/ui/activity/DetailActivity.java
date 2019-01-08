@@ -1,11 +1,13 @@
-package me.inassar.restful;
+package me.inassar.restful.ui.activity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
+import me.inassar.restful.R;
 import me.inassar.restful.model.DataItem;
+import me.inassar.restful.ui.adapter.DataItemAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;

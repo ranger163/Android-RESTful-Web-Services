@@ -17,29 +17,29 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name="me.inassar.restful.MainActivity">
+        <activity android:name="me.inassar.restful.ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="me.inassar.restful.DetailActivity">
+        <activity android:name="me.inassar.restful.ui.activity.DetailActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="me.inassar.restful.MainActivity"/>
+                    android:value="me.inassar.restful.ui.activity.MainActivity"/>
         </activity>
         <activity
-                android:name="me.inassar.restful.SigninActivity"
+                android:name="me.inassar.restful.ui.activity.SigninActivity"
                 android:label="@string/title_activity_signin">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="me.inassar.restful.MainActivity"/>
+                    android:value="me.inassar.restful.ui.activity.MainActivity"/>
         </activity>
-        <activity android:name="me.inassar.restful.PrefsActivity">
+        <activity android:name="me.inassar.restful.ui.activity.PrefsActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="me.inassar.restful.MainActivity"/>
+                    android:value="me.inassar.restful.ui.activity.MainActivity"/>
         </activity>
 
         <service

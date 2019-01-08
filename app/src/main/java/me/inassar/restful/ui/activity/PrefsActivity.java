@@ -1,9 +1,10 @@
-package me.inassar.restful;
+package me.inassar.restful.ui.activity;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import me.inassar.restful.R;
 
 public class PrefsActivity extends AppCompatActivity {
 

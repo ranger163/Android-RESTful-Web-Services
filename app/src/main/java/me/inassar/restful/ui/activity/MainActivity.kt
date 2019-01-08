@@ -1,13 +1,19 @@
-package me.inassar.restful
+package me.inassar.restful.ui.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.AsyncTaskLoader
+import android.support.v4.content.Loader
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
@@ -16,25 +22,32 @@ import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import me.inassar.restful.R
 import me.inassar.restful.model.DataItem
 import me.inassar.restful.sample.SampleDataProvider
 import me.inassar.restful.services.MyService
+import me.inassar.restful.toast
+import me.inassar.restful.ui.adapter.DataItemAdapter
 import me.inassar.restful.utils.NetworkHelper
+import java.io.IOException
+import java.io.InputStream
+import java.net.URL
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<MutableMap<String, Bitmap>> {
 
     var dataItemList = SampleDataProvider.dataItemList
     //    lateinit var mDataSource: DataSource
     lateinit var mItemList: List<DataItem>
-    lateinit var mCategories: Array<String>
-    lateinit var mItemAdapter: DataItemAdapter
+    private lateinit var mCategories: Array<String>
+    private lateinit var mItemAdapter: DataItemAdapter
+    private lateinit var mBitmaps: MutableMap<String, Bitmap>
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val dataItems = intent?.getParcelableArrayExtra(MyService.MY_SERVICE_PAYLOAD) as Array<DataItem>
             toast("Received ${dataItems.size} items from service")
             mItemList = dataItemList.toList()
-            displayDataItems(null)
+            supportLoaderManager.initLoader(0, null, this@MainActivity).forceLoad()
         }
     }
 
@@ -98,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     private fun displayDataItems(category: String?) {
 //        mItemList = mDataSource.getAllItems(category)
         if (!mItemList.isNullOrEmpty()) {
-            mItemAdapter = DataItemAdapter(this, mItemList)
+            mItemAdapter = DataItemAdapter(this, mItemList, mBitmaps)
             rvItems.adapter = mItemAdapter
         } else {
             toast("No data to display")
@@ -166,12 +179,59 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<MutableMap<String, Bitmap>> {
+        return ImageDownloader(this, mItemList)
+    }
+
+    override fun onLoadFinished(loader: Loader<MutableMap<String, Bitmap>>, data: MutableMap<String, Bitmap>?) {
+        mBitmaps = data!!
+        displayDataItems(null)
+    }
+
+    override fun onLoaderReset(loader: Loader<MutableMap<String, Bitmap>>) {
+
+    }
+
     companion object {
 
         private const val SIGNIN_REQUEST = 1001
         val MY_GLOBAL_PREFS = "my_global_prefs"
         private val TAG = MainActivity::class.java.simpleName
         private const val JSON_URL = "http://560057.youcanlearnit.net/services/json/itemsfeed.php"
+
+        @SuppressLint("StaticFieldLeak")
+        private class ImageDownloader(context: Context, itemList: List<DataItem>) :
+            AsyncTaskLoader<MutableMap<String, Bitmap>>(context) {
+            private var mItemList: List<DataItem>? = null
+
+            init {
+                mItemList = itemList
+            }
+
+            override fun loadInBackground(): MutableMap<String, Bitmap>? {
+                //download image files here
+                val map: MutableMap<String, Bitmap> = HashMap()
+                mItemList?.forEach {
+                    val imageUrl = "$PHOTOS_BASE_URL${it.image}"
+                    var inputStream: InputStream? = null
+                    try {
+                        inputStream = URL(imageUrl).content as InputStream
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+                        map[it.itemName!!] = bitmap
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    } finally {
+                        inputStream?.close()
+                    }
+                }
+                return map
+            }
+
+            companion object {
+                private const val PHOTOS_BASE_URL = "http://560057.youcanlearnit.net/services/images/"
+            }
+
+        }
     }
 
 }

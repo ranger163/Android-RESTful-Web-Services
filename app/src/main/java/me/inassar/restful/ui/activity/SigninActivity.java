@@ -1,4 +1,4 @@
-package me.inassar.restful;
+package me.inassar.restful.ui.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import me.inassar.restful.R;
 
 /**
  * A login screen that offers login via email/password.
